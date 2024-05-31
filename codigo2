@@ -1,0 +1,101 @@
+import java.util.*;
+
+class Card {
+    String suit;
+    String color;
+    String value;
+
+    public Card(String suit, String color, String value) {
+        this.suit = suit;
+        this.color = color;
+        this.value = value;
+    }
+
+
+    public String toString() {
+        return suit + "," + color + "," + value;
+    }
+}
+
+class Deck {
+    LinkedList<Card> cards;
+
+    public Deck() {
+        cards = new LinkedList<>();
+        String[] suits = {"tréboles", "corazones", "picas", "diamantes"};
+        String[] colors = {"negro", "rojo"};
+        String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "A", "J", "Q", "K"};
+
+        for (String suit : suits) {
+            for (String value : values) {
+                String color = (suit.equals("tréboles") || suit.equals("picas")) ? colors[0] : colors[1];
+                cards.add(new Card(suit, color, value));
+            }
+        }
+    }
+
+    public void shuffle() {
+        Collections.shuffle(cards);
+        System.out.println("Se mezcló el Deck.");
+    }
+
+    public void head() {
+        Card card = cards.getFirst();
+        cards.removeFirst();
+        System.out.println(card);
+        System.out.println("Quedan " + cards.size() + " cartas en deck");
+    }
+
+    public Card pick() {
+        int index = new Random().nextInt(cards.size());
+        Card card = cards.get(index);
+        cards.remove(index);
+        System.out.println(card);
+        System.out.println("Quedan " + cards.size() + " cartas en deck");
+        return card;
+    }
+
+    public void hand() {
+        List<Card> handCards = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            handCards.add(pick());
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Deck deck = new Deck();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Elige una opción:");
+            System.out.println("1. Mezclar deck");
+            System.out.println("2. Ver la primera carta del deck");
+            System.out.println("3. Seleccionar una carta al azar");
+            System.out.println("4. Obtener un arreglo de cinco cartas");
+            System.out.println("5. Salir");
+
+            int option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    deck.shuffle();
+                    break;
+                case 2:
+                    deck.head();
+                    break;
+                case 3:
+                    deck.pick();
+                    break;
+                case 4:
+                    deck.hand();
+                    break;
+                case 5:
+                    System.exit(0);
+                default:
+                    System.out.println("Opción no válida. Por favor, elige una opción del 1 al 5.");
+            }
+        }
+    }
+}
